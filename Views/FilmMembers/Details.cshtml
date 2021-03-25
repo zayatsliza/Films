@@ -1,13 +1,12 @@
 ﻿@model Films.FilmMember
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Деталі про члена команди";
 }
 
-<h1>Details</h1>
+<h1>Деталі про члена команди</h1>
 
 <div>
-    <h4>FilmMember</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -32,7 +31,7 @@
             @Html.DisplayNameFor(model => model.IdfilmNavigation)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdfilmNavigation.Descript)
+            @Html.DisplayFor(model => model.IdfilmNavigation.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IdgenderNavigation)
@@ -49,6 +48,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Idfilmem">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Idfilmem">Редагувати</a> |
+    <a asp-action="Index">Назад до списку</a>
 </div>

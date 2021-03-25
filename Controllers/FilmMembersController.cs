@@ -19,10 +19,15 @@ namespace Films.Controllers
         }
 
         // GET: FilmMembers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id, string name)
         {
-            var dBFilmContext = _context.FilmMembers.Include(f => f.IdfilmNavigation).Include(f => f.IdgenderNavigation).Include(f => f.IdpostNavigation);
-            return View(await dBFilmContext.ToListAsync());
+            if (id == 0) return RedirectToAction("Films","Index");
+            ViewBag.Id = id;
+            ViewBag.Name = name;
+            var film = _context.FilmMembers.Include(b => b.IdfilmNavigation).Include(b => b.IdpostNavigation);
+            //var dBFilmContext = _context.FilmMembers.Include(f => f.IdfilmNavigation).Include(f => f.IdgenderNavigation).Include(f => f.IdpostNavigation);
+            //return View(await dBFilmContext.ToListAsync());
+            return View(await film.ToListAsync());
         }
 
         // GET: FilmMembers/Details/5
@@ -49,7 +54,7 @@ namespace Films.Controllers
         // GET: FilmMembers/Create
         public IActionResult Create()
         {
-            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Descript");
+            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Name");
             ViewData["Idgender"] = new SelectList(_context.Genders, "Idgender", "Name");
             ViewData["Idpost"] = new SelectList(_context.Positions, "Idpost", "Name");
             return View();
@@ -68,7 +73,7 @@ namespace Films.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Descript", filmMember.Idfilm);
+            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Name", filmMember.Idfilm);
             ViewData["Idgender"] = new SelectList(_context.Genders, "Idgender", "Name", filmMember.Idgender);
             ViewData["Idpost"] = new SelectList(_context.Positions, "Idpost", "Name", filmMember.Idpost);
             return View(filmMember);
@@ -87,7 +92,7 @@ namespace Films.Controllers
             {
                 return NotFound();
             }
-            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Descript", filmMember.Idfilm);
+            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Name", filmMember.Idfilm);
             ViewData["Idgender"] = new SelectList(_context.Genders, "Idgender", "Name", filmMember.Idgender);
             ViewData["Idpost"] = new SelectList(_context.Positions, "Idpost", "Name", filmMember.Idpost);
             return View(filmMember);
@@ -125,7 +130,7 @@ namespace Films.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Descript", filmMember.Idfilm);
+            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Name", filmMember.Idfilm);
             ViewData["Idgender"] = new SelectList(_context.Genders, "Idgender", "Name", filmMember.Idgender);
             ViewData["Idpost"] = new SelectList(_context.Positions, "Idpost", "Name", filmMember.Idpost);
             return View(filmMember);

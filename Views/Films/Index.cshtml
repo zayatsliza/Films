@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Films.Film>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Інформація про фільми";
 }
 
-<h1>Index</h1>
+<h1>Інформація про фільми</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Додати фільм</a>
 </p>
 <table class="table">
     <thead>
@@ -28,26 +28,53 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descript)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Idfilm">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Idfilm">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Idfilm">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descript)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Idfilm">Редагувати</a> |
+                    <a asp-action="Details" asp-route-id="@item.Idfilm">Подивитись деталі</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Idfilm">Видалити</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+<div class="container">
+    <div id="chart1"></div>
+</div>
+@section scripts{
+    <script type "text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            $.get('/api/Charts/JsonData1', function (JsonData) {
+                data = google.visualization.arrayToDataTable(JsonData, false);
+                var option = {
+                    title: "Співвідношення кількості фільмів та років випуску",
+                    width: 500,
+                    height: 400
+                };
+                chart = new google.visualization.PieChart(document.getElementById('chart1'));
+                chart.draw(data, option);
+            })
+        }
+    </script>
+}

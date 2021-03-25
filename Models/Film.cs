@@ -29,6 +29,8 @@ namespace Films
         [Required(ErrorMessage = "Поле не може бути порожнім.")]
         public double Rating { get; set; }
 
+        //public int FilmGenreId { get; set; }
+
         public virtual ICollection<FilmGenre> FilmGenres { get; set; }
         public virtual ICollection<FilmMember> FilmMembers { get; set; }
     }

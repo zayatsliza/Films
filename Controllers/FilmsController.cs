@@ -19,9 +19,22 @@ namespace Films.Controllers
         }
 
         // GET: Films
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id, string name)
         {
-            return View(await _context.Films.ToListAsync());
+            ViewBag.IdFilmGenre = id;
+            ViewBag.Name = name;
+            ViewBag.Context = _context;
+            if(id == null)
+            {
+                var film = _context.Films.Include(b => b.FilmGenres);
+                return View(await film.ToListAsync());
+            }
+            else
+            {
+                var film = _context.Films.Where(b => b.FilmGenres != null).Include(b => b.FilmGenres);
+                return View(await film.ToListAsync());
+            }
+            //return View(await _context.Films.ToListAsync());
         }
 
         public async Task<IActionResult> Crew(int? idF)
@@ -127,8 +140,12 @@ namespace Films.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "FilmGenres", new { id = id, name = film.Name, filmGenre = 0 });
+                //return RedirectToAction(nameof(Index));
             }
+            ViewBag.FilmGenre = film.FilmGenres;
+            ViewBag.Name = film.Name;
+            ViewBag.Films = id;
             return View(film);
         }
 
@@ -155,6 +172,16 @@ namespace Films.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var crew = _context.FilmMembers.Where(f => f.Idfilm == id).ToList();
+            if(crew.Count != 0)
+            {
+                foreach(var person in crew)
+                {
+                    var a = await _context.FilmMembers.FindAsync(person.Idfilmem);
+                    _context.FilmMembers.Remove(a);
+                    await _context.SaveChangesAsync();                }
+            }
+            
             var film = await _context.Films.FindAsync(id);
             _context.Films.Remove(film);
             await _context.SaveChangesAsync();

@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Films.FilmGenre>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Жанри фільмів";
 }
 
-<h1>Index</h1>
+<h1>Жанри фільмів</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Додати жанр до фільму</a>
 </p>
 <table class="table">
     <thead>
@@ -22,20 +22,46 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdfilmNavigation.Descript)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdgenresNavigation.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdfilmGenres">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdfilmGenres">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdfilmGenres">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdfilmNavigation.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdgenresNavigation.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdfilmGenres">Редагувати</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdfilmGenres">Подивитись деталі</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdfilmGenres">Видалити</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<div class="container">
+    <div id="chart1"></div>
+</div>
+@section scripts{
+    <script type "text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            $.get('/api/Charts/JsonData', function(JsonData) {
+                data = google.visualization.arrayToDataTable(JsonData, false);
+                var option = {
+                    title: "Співвідношення кількості фільмів та жанрів",
+                    width: 500,
+                    height: 400
+                };
+                chart = new google.visualization.PieChart(document.getElementById('chart1'));
+                chart.draw(data, option);
+            })
+        }
+    </script>
+}

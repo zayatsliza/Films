@@ -49,7 +49,7 @@ namespace Films.Controllers
         // GET: FilmGenres/Create
         public IActionResult Create()
         {
-            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Descript");
+            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Name");
             ViewData["Idgenres"] = new SelectList(_context.Genres, "Idgenres", "Name");
             return View();
         }
@@ -67,7 +67,7 @@ namespace Films.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Descript", filmGenre.Idfilm);
+            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Name", filmGenre.Idfilm);
             ViewData["Idgenres"] = new SelectList(_context.Genres, "Idgenres", "Name", filmGenre.Idgenres);
             return View(filmGenre);
         }
@@ -85,7 +85,7 @@ namespace Films.Controllers
             {
                 return NotFound();
             }
-            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Descript", filmGenre.Idfilm);
+            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Name", filmGenre.Idfilm);
             ViewData["Idgenres"] = new SelectList(_context.Genres, "Idgenres", "Name", filmGenre.Idgenres);
             return View(filmGenre);
         }
@@ -122,7 +122,7 @@ namespace Films.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Descript", filmGenre.Idfilm);
+            ViewData["Idfilm"] = new SelectList(_context.Films, "Idfilm", "Name", filmGenre.Idfilm);
             ViewData["Idgenres"] = new SelectList(_context.Genres, "Idgenres", "Name", filmGenre.Idgenres);
             return View(filmGenre);
         }
